@@ -481,16 +481,16 @@ void gatherPrintResults(int myRank, int numProcesses, int matrixSize, int origin
 
   if (myRank == 0) {
     cerr << "Receive whole result and print:" << endl;
-    cout << originalSize << " " << originalSize << endl;
+    cerr << originalSize << " " << originalSize << endl;
     for (int i = 0; i < originalSize; i++) {
       for (int j = 0; j < numProcesses; j++) {
         for (int k = 0; k < colPerProc; k++) {
           if (j * colPerProc + k < originalSize) {
-            cout << fullResult[j * (matrixSize * colPerProc) + i * colPerProc + k] << " ";
+            cerr << fullResult[j * (matrixSize * colPerProc) + i * colPerProc + k] << " ";
           }
         }
       }
-      cout << endl;
+      cerr << endl;
     }
     delete[] fullResult;
   }
@@ -501,12 +501,17 @@ void reducePrintResult(int myRank, double ge_value, int originalSize, PartialDen
   int fullResult = 0;
   MPI_Reduce(&myResult, &fullResult, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
   if (myRank == 0) {
-    cout << fullResult << endl;
+    cerr << fullResult << endl;
   }
 }
 
 int main(int argc, char* argv[]) {
   MPI_Init(&argc, &argv); /* intialize the library with parameters caught by the runtime */
+
+  std::ofstream out("out.txt");
+  std::streambuf *coutbuf = std::cerr.rdbuf(); //save old buf
+  std::cerr.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
+
   char *csrFilename;
   bool inner, print, use_ge;
   double ge_value;
@@ -590,6 +595,16 @@ int main(int argc, char* argv[]) {
   } else if (use_ge) {
     reducePrintResult(myRank, ge_value, originalSize, myDensePart_C);
   }
+
+  std::cerr.rdbuf(coutbuf); //reset to standard output again
+  out.close();
+
+  sleep(myRank * 2);
+  cerr << "PRINTING RANK " << myRank << endl;
+  std::ifstream f("out.txt");
+  if (f.is_open())
+    std::cerr << f.rdbuf();
+  f.close();
 
   MPI_Finalize(); /* mark that we've finished communicating */
   return 0;
