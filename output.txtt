@@ -1,0 +1,340 @@
+[1,0]<stdout>:Matrices ready. A: 
+[1,1]<stdout>:Matrices ready. A: 
+[1,1]<stdout>:<PartialSparseCSC> msize=8 offset=2.
+[1,2]<stdout>:Matrices ready. A: 
+[1,2]<stdout>:<PartialSparseCSC> msize=8 offset=4.
+[1,0]<stdout>:<PartialSparseCSC> msize=8 offset=0.
+[1,0]<stdout>:V: 1 1 
+[1,0]<stdout>:Cptr: 0 1 2 
+[1,0]<stdout>:Ridx: 0 1 
+[1,0]<stdout>:<end>
+[1,0]<stdout>:<PartialDenseMatrix>, offset=0
+[1,0]<stdout>:Data:
+[1,0]<stdout>:0  1  
+[1,0]<stdout>:10  11  
+[1,0]<stdout>:20  21  
+[1,0]<stdout>:30  31  
+[1,0]<stdout>:40  41  
+[1,0]<stdout>:50  51  
+[1,0]<stdout>:60  61  
+[1,0]<stdout>:70  71  
+[1,0]<stdout>:<PartialDenseMatrix>, offset=0
+[1,0]<stdout>:Data:
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:Start round 0. Start multiply step.
+[1,1]<stdout>:V: 1 1 
+[1,1]<stdout>:Cptr: 0 1 2 
+[1,1]<stdout>:Ridx: 2 3 
+[1,1]<stdout>:<end>
+[1,1]<stdout>:<PartialDenseMatrix>, offset=2
+[1,1]<stdout>:Data:
+[1,1]<stdout>:2  3  
+[1,1]<stdout>:12  13  
+[1,1]<stdout>:22  23  
+[1,1]<stdout>:32  33  
+[1,1]<stdout>:42  43  
+[1,1]<stdout>:52  53  
+[1,1]<stdout>:62  63  
+[1,1]<stdout>:72  73  
+[1,1]<stdout>:<PartialDenseMatrix>, offset=2
+[1,1]<stdout>:Data:
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:0  0  
+[1,1]<stdout>:Start round 0. Start multiply step.
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 2 0 0 2
+[1,2]<stdout>:V: 1 1 
+[1,2]<stdout>:Cptr: 0 1 2 
+[1,2]<stdout>:Ridx: 4 5 
+[1,2]<stdout>:<end>
+[1,2]<stdout>:<PartialDenseMatrix>, offset=4
+[1,2]<stdout>:Data:
+[1,2]<stdout>:4  5  
+[1,2]<stdout>:14  15  
+[1,2]<stdout>:24  25  
+[1,2]<stdout>:34  35  
+[1,2]<stdout>:44  45  
+[1,2]<stdout>:54  55  
+[1,2]<stdout>:64  65  
+[1,2]<stdout>:74  75  
+[1,2]<stdout>:<PartialDenseMatrix>, offset=4
+[1,2]<stdout>:Data:
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:0  0  
+[1,2]<stdout>:Start round 0. Start multiply step.
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 3 1 1 3
+[1,1]<stdout>:Multiply success. Shift.
+[1,1]<stdout>:Shift initiated. Receive.
+[1,1]<stdout>:Receive finished. Waitall.
+[1,1]<stdout>:Round 0 finished. New A after shift: 
+[1,1]<stdout>:<PartialSparseCSC> msize=8 offset=0.
+[1,1]<stdout>:V: 1 1 
+[1,1]<stdout>:Cptr: 0 1 2 
+[1,1]<stdout>:Ridx: 0 1 
+[1,1]<stdout>:<end>
+[1,1]<stdout>:Start round 1. Start multiply step.
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 0 0 0 0
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 1 1 1 1
+[1,1]<stdout>:Multiply success. Shift.
+[1,1]<stdout>:Shift initiated. Receive.
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 0 0 0 0
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 1 1 1 1
+[1,0]<stdout>:Multiply success. Shift.
+[1,0]<stdout>:Shift initiated. Receive.
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 4 0 0 4
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 5 1 1 5
+[1,2]<stdout>:Multiply success. Shift.
+[1,2]<stdout>:Shift initiated. Receive.
+[1,2]<stdout>:Receive finished. Waitall.
+[1,2]<stdout>:Round 0 finished. New A after shift: 
+[1,2]<stdout>:<PartialSparseCSC> msize=8 offset=2.
+[1,2]<stdout>:V: 1 1 
+[1,2]<stdout>:Cptr: 0 1 2 
+[1,2]<stdout>:Ridx: 2 3 
+[1,2]<stdout>:<end>
+[1,2]<stdout>:Start round 1. Start multiply step.
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 2 0 0 2
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 3 1 1 3
+[1,2]<stdout>:Multiply success. Shift.
+[1,2]<stdout>:Shift initiated. Receive.
+[1,2]<stdout>:Receive finished. Waitall.
+[1,2]<stdout>:Round 1 finished. New A after shift: 
+[1,2]<stdout>:<PartialSparseCSC> msize=8 offset=2.
+[1,2]<stdout>:V: 1 1 
+[1,2]<stdout>:Cptr: 0 1 2 
+[1,2]<stdout>:Ridx: 0 1 
+[1,2]<stdout>:<end>
+[1,2]<stdout>:Start round 2. Start multiply step.
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 0 0 0 2
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 1 1 1 3
+[1,2]<stdout>:Multiply success. Shift.
+[1,2]<stdout>:Shift initiated. Receive.
+[1,3]<stdout>:Matrices ready. A: 
+[1,3]<stdout>:<PartialSparseCSC> msize=8 offset=6.
+[1,3]<stdout>:V: 1 1 
+[1,3]<stdout>:Cptr: 0 1 2 
+[1,3]<stdout>:Ridx: 6 7 
+[1,3]<stdout>:<end>
+[1,3]<stdout>:<PartialDenseMatrix>, offset=6
+[1,3]<stdout>:Data:
+[1,3]<stdout>:6  7  
+[1,3]<stdout>:16  17  
+[1,3]<stdout>:26  27  
+[1,3]<stdout>:36  37  
+[1,3]<stdout>:46  47  
+[1,3]<stdout>:56  57  
+[1,3]<stdout>:66  67  
+[1,3]<stdout>:76  77  
+[1,3]<stdout>:<PartialDenseMatrix>, offset=6
+[1,3]<stdout>:Data:
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:0  0  
+[1,3]<stdout>:Start round 0. Start multiply step.
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 6 0 0 6
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 7 1 1 7
+[1,3]<stdout>:Multiply success. Shift.
+[1,3]<stdout>:Shift initiated. Receive.
+[1,0]<stdout>:Receive finished. Waitall.
+[1,0]<stdout>:Round 0 finished. New A after shift: 
+[1,0]<stdout>:<PartialSparseCSC> msize=8 offset=6.
+[1,0]<stdout>:V: 1 1 
+[1,0]<stdout>:Cptr: 0 1 2 
+[1,0]<stdout>:Ridx: 6 7 
+[1,0]<stdout>:<end>
+[1,0]<stdout>:Start round 1. Start multiply step.
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 6 0 0 6
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 7 1 1 7
+[1,0]<stdout>:Multiply success. Shift.
+[1,0]<stdout>:Shift initiated. Receive.
+[1,1]<stdout>:Receive finished. Waitall.
+[1,1]<stdout>:Round 1 finished. New A after shift: 
+[1,1]<stdout>:<PartialSparseCSC> msize=8 offset=0.
+[1,1]<stdout>:V: 1 1 
+[1,1]<stdout>:Cptr: 0 1 2 
+[1,1]<stdout>:Ridx: 6 7 
+[1,1]<stdout>:<end>
+[1,1]<stdout>:Start round 2. Start multiply step.
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 6 0 0 0
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 7 1 1 1
+[1,1]<stdout>:Multiply success. Shift.
+[1,1]<stdout>:Shift initiated. Receive.
+[1,2]<stdout>:Receive finished. Waitall.
+[1,2]<stdout>:Round 2 finished. New A after shift: 
+[1,2]<stdout>:<PartialSparseCSC> msize=8 offset=2.
+[1,2]<stdout>:V: 1 1 
+[1,2]<stdout>:Cptr: 0 1 2 
+[1,2]<stdout>:Ridx: 6 7 
+[1,2]<stdout>:<end>
+[1,2]<stdout>:Start round 3. Start multiply step.
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 6 0 0 2
+[1,2]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 7 1 1 3
+[1,2]<stdout>:Multiply success. Shift.
+[1,2]<stdout>:Shift initiated. Receive.
+[1,3]<stdout>:Receive finished. Waitall.
+[1,3]<stdout>:Round 0 finished. New A after shift: 
+[1,3]<stdout>:<PartialSparseCSC> msize=8 offset=4.
+[1,3]<stdout>:V: 1 1 
+[1,3]<stdout>:Cptr: 0 1 2 
+[1,3]<stdout>:Ridx: 4 5 
+[1,3]<stdout>:<end>
+[1,3]<stdout>:Start round 1. Start multiply step.
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 4 0 0 4
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 5 1 1 5
+[1,3]<stdout>:Multiply success. Shift.
+[1,0]<stdout>:Receive finished. Waitall.
+[1,0]<stdout>:Round 1 finished. New A after shift: 
+[1,3]<stdout>:Shift initiated. Receive.
+[1,0]<stdout>:<PartialSparseCSC> msize=8 offset=6.
+[1,0]<stdout>:V: 1 1 
+[1,0]<stdout>:Cptr: 0 1 2 
+[1,0]<stdout>:Ridx: 4 5 
+[1,0]<stdout>:<end>
+[1,0]<stdout>:Start round 2. Start multiply step.
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 4 0 0 6
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 5 1 1 7
+[1,0]<stdout>:Multiply success. Shift.
+[1,0]<stdout>:Shift initiated. Receive.
+[1,1]<stdout>:Receive finished. Waitall.
+[1,1]<stdout>:Round 2 finished. New A after shift: 
+[1,1]<stdout>:<PartialSparseCSC> msize=8 offset=0.
+[1,1]<stdout>:V: 1 1 
+[1,1]<stdout>:Cptr: 0 1 2 
+[1,1]<stdout>:Ridx: 4 5 
+[1,1]<stdout>:<end>
+[1,1]<stdout>:Start round 3. Start multiply step.
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 4 0 0 0
+[1,1]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 5 1 1 1
+[1,1]<stdout>:Multiply success. Shift.
+[1,1]<stdout>:Shift initiated. Receive.
+[1,2]<stdout>:Receive finished. Waitall.
+[1,2]<stdout>:Round 3 finished. New A after shift: 
+[1,2]<stdout>:<PartialSparseCSC> msize=8 offset=2.
+[1,2]<stdout>:V: 1 1 
+[1,2]<stdout>:Cptr: 0 1 2 
+[1,2]<stdout>:Ridx: 4 5 
+[1,2]<stdout>:<end>
+[1,2]<stdout>:Multiply ready. C:
+[1,2]<stdout>:<PartialDenseMatrix>, offset=4
+[1,2]<stdout>:Data:
+[1,2]<stdout>:24  0  
+[1,2]<stdout>:0  35  
+[1,2]<stdout>:24  0  
+[1,2]<stdout>:0  35  
+[1,2]<stdout>:44  0  
+[1,2]<stdout>:0  55  
+[1,2]<stdout>:24  0  
+[1,2]<stdout>:0  35  
+[1,3]<stdout>:Receive finished. Waitall.
+[1,0]<stdout>:Receive finished. Waitall.
+[1,0]<stdout>:Round 2 finished. New A after shift: 
+[1,0]<stdout>:<PartialSparseCSC> msize=8 offset=6.
+[1,0]<stdout>:V: 1 1 
+[1,0]<stdout>:Cptr: 0 1 2 
+[1,0]<stdout>:Ridx: 2 3 
+[1,0]<stdout>:<end>
+[1,3]<stdout>:Round 1 finished. New A after shift: 
+[1,3]<stdout>:<PartialSparseCSC> msize=8 offset=4.
+[1,3]<stdout>:V: 1 1 
+[1,3]<stdout>:Cptr: 0 1 2 
+[1,3]<stdout>:Ridx: 2 3 
+[1,3]<stdout>:<end>
+[1,3]<stdout>:Start round 2. Start multiply step.
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 2 0 0 4
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 3 1 1 5
+[1,3]<stdout>:Multiply success. Shift.
+[1,3]<stdout>:Shift initiated. Receive.
+[1,3]<stdout>:Receive finished. Waitall.
+[1,3]<stdout>:Round 2 finished. New A after shift: 
+[1,3]<stdout>:<PartialSparseCSC> msize=8 offset=4.
+[1,3]<stdout>:V: 1 1 
+[1,3]<stdout>:Cptr: 0 1 2 
+[1,3]<stdout>:Ridx: 0 1 
+[1,3]<stdout>:<end>
+[1,3]<stdout>:Start round 3. Start multiply step.
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 0 0 0 4
+[1,3]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 1 1 1 5
+[1,3]<stdout>:Multiply success. Shift.
+[1,0]<stdout>:Start round 3. Start multiply step.
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 2 0 0 6
+[1,0]<stdout>:MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset 3 1 1 7
+[1,0]<stdout>:Multiply success. Shift.
+[1,1]<stdout>:Receive finished. Waitall.
+[1,1]<stdout>:Round 3 finished. New A after shift: 
+[1,1]<stdout>:<PartialSparseCSC> msize=8 offset=0.
+[1,1]<stdout>:V: 1 1 
+[1,1]<stdout>:Cptr: 0 1 2 
+[1,1]<stdout>:Ridx: 2 3 
+[1,1]<stdout>:<end>
+[1,1]<stdout>:Multiply ready. C:
+[1,1]<stdout>:<PartialDenseMatrix>, offset=2
+[1,1]<stdout>:Data:
+[1,1]<stdout>:2  0  
+[1,1]<stdout>:0  13  
+[1,1]<stdout>:22  0  
+[1,1]<stdout>:0  33  
+[1,1]<stdout>:2  0  
+[1,1]<stdout>:0  13  
+[1,1]<stdout>:2  0  
+[1,1]<stdout>:0  13  
+[1,3]<stdout>:Shift initiated. Receive.
+[1,3]<stdout>:Receive finished. Waitall.
+[1,3]<stdout>:Round 3 finished. New A after shift: 
+[1,3]<stdout>:<PartialSparseCSC> msize=8 offset=4.
+[1,3]<stdout>:V: 1 1 
+[1,3]<stdout>:Cptr: 0 1 2 
+[1,3]<stdout>:Ridx: 6 7 
+[1,3]<stdout>:<end>
+[1,3]<stdout>:Multiply ready. C:
+[1,3]<stdout>:<PartialDenseMatrix>, offset=6
+[1,3]<stdout>:Data:
+[1,3]<stdout>:46  0  
+[1,3]<stdout>:0  57  
+[1,3]<stdout>:46  0  
+[1,3]<stdout>:0  57  
+[1,3]<stdout>:46  0  
+[1,3]<stdout>:0  57  
+[1,3]<stdout>:66  0  
+[1,3]<stdout>:0  77  
+[1,0]<stdout>:Shift initiated. Receive.
+[1,0]<stdout>:Receive finished. Waitall.
+[1,0]<stdout>:Round 3 finished. New A after shift: 
+[1,0]<stdout>:<PartialSparseCSC> msize=8 offset=6.
+[1,0]<stdout>:V: 1 1 
+[1,0]<stdout>:Cptr: 0 1 2 
+[1,0]<stdout>:Ridx: 0 1 
+[1,0]<stdout>:<end>
+[1,0]<stdout>:Multiply ready. C:
+[1,0]<stdout>:<PartialDenseMatrix>, offset=0
+[1,0]<stdout>:Data:
+[1,0]<stdout>:0  0  
+[1,0]<stdout>:0  11  
+[1,0]<stdout>:60  0  
+[1,0]<stdout>:0  71  
+[1,0]<stdout>:60  0  
+[1,0]<stdout>:0  71  
+[1,0]<stdout>:60  0  
+[1,0]<stdout>:0  71
