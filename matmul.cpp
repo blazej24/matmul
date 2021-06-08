@@ -185,6 +185,7 @@ public:
                 MPI_COMM_WORLD, // communicator
                 &requests[2 * numProcessors + proc] // place to store request handle
         );
+        cerr << "SENDING OFFSET: " << offset << " TO PROC: " << proc << endl;
         MPI_Isend(
                 &offset, // buffer
                 1, // count
@@ -347,6 +348,7 @@ public:
                   MPI_COMM_WORLD, // communicator
                   MPI_STATUS_IGNORE // place for status
           );
+          cerr << "RECEIVED OFFSET: " << offset << endl;
         } else {
           assert(false);
         }
@@ -387,6 +389,7 @@ public:
               MPI_COMM_WORLD, // communicator
               &requests[2] // place to store request handle
       );
+      cerr << "SENDING OFFSET: " << offset << " TO PROC: " << target << endl;
       MPI_Isend(
               &offset, // buffer
               1, // count
