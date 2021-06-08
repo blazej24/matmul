@@ -150,7 +150,7 @@ public:
 
     vector<MPI_Request> SplitSendToProcessors(int numProcessors) {
       int colPerProc = colsNum / numProcessors; // TODO: add zeros when c % p != 0
-      vector<MPI_Request> requests(3 * numProcessors, MPI_REQUEST_NULL);
+      vector<MPI_Request> requests(4 * numProcessors, MPI_REQUEST_NULL);
 
       for (int i = 0, proc = 0; i < colsNum; i += colPerProc, proc++) {
         int startC = i, endC = i + colPerProc;
