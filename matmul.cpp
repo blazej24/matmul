@@ -301,6 +301,8 @@ public:
                 MPI_COMM_WORLD,
                 &status
         );
+        MPI_Get_count(&status, MPI_DOUBLE, &count);
+        cerr << "STATUS: COUNT: " << count << " source " << status.MPI_SOURCE << " tag " << status.MPI_TAG << endl;
 
         if (status.MPI_TAG == VARR_MSG) {
           MPI_Get_count(&status, MPI_DOUBLE, &count);
