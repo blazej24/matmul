@@ -293,6 +293,7 @@ public:
       MPI_Status status;
       int count;
       matrixSize = matrixSize_;
+      int offset_;
 
       for (int i = 0; i < 4; i++) {
         MPI_Probe(
@@ -301,7 +302,7 @@ public:
                 MPI_COMM_WORLD,
                 &status
         );
-        MPI_Get_count(&status, MPI_DOUBLE, &count);
+        MPI_Get_count(&status, MPI_INT, &count);
         cerr << "STATUS: COUNT: " << count << " source " << status.MPI_SOURCE << " tag " << status.MPI_TAG << endl;
 
         if (status.MPI_TAG == VARR_MSG) {
@@ -342,7 +343,7 @@ public:
           );
         } else if (status.MPI_TAG == OFFSET_MSG) {
           MPI_Recv(
-                  &offset, // buffer
+                  &offset_, // buffer
                   1, // count
                   MPI_INT, // datatype
                   status.MPI_SOURCE, // source
@@ -350,7 +351,8 @@ public:
                   MPI_COMM_WORLD, // communicator
                   MPI_STATUS_IGNORE // place for status
           );
-          cerr << "RECEIVED OFFSET: " << offset << endl;
+          cerr << "RECEIVED OFFSET: " << offset_ << endl;
+          offset = offset_;
         } else {
           assert(false);
         }
