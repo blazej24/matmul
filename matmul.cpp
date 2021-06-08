@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cstring>
 #include <cassert>
 #include <algorithm>
 
@@ -523,7 +524,7 @@ int main(int argc, char* argv[]) {
   int numProcesses, myRank, matrixSize, originalSize;
   MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
   MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
-
+  cerr << "numProc: " << numProcesses << " myRank: " << myRank << endl;
   int colPerProc;
   int myOffset;
 
