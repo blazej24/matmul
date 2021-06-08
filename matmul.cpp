@@ -9,6 +9,7 @@
 #include <cstring>
 #include <cassert>
 #include <algorithm>
+#include <string>
 
 #include "densematgen.h"
 
@@ -508,7 +509,11 @@ void reducePrintResult(int myRank, double ge_value, int originalSize, PartialDen
 int main(int argc, char* argv[]) {
   MPI_Init(&argc, &argv); /* intialize the library with parameters caught by the runtime */
 
-  std::ofstream out("out.txt");
+  int numProcesses, myRank, matrixSize, originalSize;
+  MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
+  MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+
+  std::ofstream out("out.txt" + to_string(myRank));
   std::streambuf *coutbuf = std::cerr.rdbuf(); //save old buf
   std::cerr.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
 
@@ -526,9 +531,6 @@ int main(int argc, char* argv[]) {
   if (use_ge) cerr << " ge_value=" << ge_value;
   cerr << " repl_group=" << repl_group << " exponent=" << exponent << " seed=" << seed << endl;
 
-  int numProcesses, myRank, matrixSize, originalSize;
-  MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
-  MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
   cerr << "numProc: " << numProcesses << " myRank: " << myRank << endl;
   int colPerProc;
   int myOffset;
@@ -601,7 +603,7 @@ int main(int argc, char* argv[]) {
 
   sleep(myRank * 2);
   cerr << "PRINTING RANK " << myRank << endl;
-  std::ifstream f("out.txt");
+  std::ifstream f("out.txt" + to_string(myRank));
   if (f.is_open())
     std::cerr << f.rdbuf();
   f.close();
