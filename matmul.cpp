@@ -574,7 +574,7 @@ int main(int argc, char* argv[]) {
     csr.EnsureSizeDivisibleBy(numProcesses);
     matrixSize = csr.Size();
     CSCMatrix csc(csr);
-    csc.Print();
+    //csc.Print();
 
     colPerProc = matrixSize / numProcesses;
     myOffset = colPerProc * myRank;
@@ -599,7 +599,7 @@ int main(int argc, char* argv[]) {
   MPI_Barrier(MPI_COMM_WORLD);
 
   //cerr << "Matrices ready. A: " << endl;
-  mySparsePart_A.Print();
+  //mySparsePart_A.Print();
   //myDensePart_B.Print();
   //myDensePart_C.Print();
 
