@@ -598,7 +598,7 @@ int main(int argc, char* argv[]) {
   myDensePart_B.FillFromGenerator(seed, originalSize);
   MPI_Barrier(MPI_COMM_WORLD);
 
-  cerr << "Matrices ready. A: " << endl;
+  //cerr << "Matrices ready. A: " << endl;
   mySparsePart_A.Print();
   //myDensePart_B.Print();
   //myDensePart_C.Print();
@@ -609,25 +609,25 @@ int main(int argc, char* argv[]) {
   int repl_groups_in_total = numProcesses / repl_group_size;
   int myReplGroup = myRank / repl_group_size;
   int firstMember = myReplGroup * repl_group_size;
-  cerr << "Process " << myRank << " starts replicating" << endl;
+  //cerr << "Process " << myRank << " starts replicating" << endl;
   for (int member = firstMember; member < firstMember + repl_group_size; member++) {
     if (myRank == member) continue;
-    cerr << "Process " << myRank << " sends to " << member << endl;
+    //cerr << "Process " << myRank << " sends to " << member << endl;
     mySparsePart_A.SendTo(member);
     //PartialCSCMatrix colleaguesPart = PartialCSCMatrix(matrixSize, numProcesses);
     sparseParts_A.emplace_back(matrixSize, numProcesses);
     //sparseParts_A.push_back(PartialCSCMatrix(matrixSize, numProcesses));
-    cerr << "Process " << myRank << " just received " << endl;
-    sparseParts_A[sparseParts_A.size() - 1].Print();
+    //cerr << "Process " << myRank << " just received " << endl;
+    //sparseParts_A[sparseParts_A.size() - 1].Print();
   }
-  cerr << "Process " << myRank << " finished replicating, size=" << sparseParts_A.size() << endl;
+  //cerr << "Process " << myRank << " finished replicating, size=" << sparseParts_A.size() << endl;
   assert(sparseParts_A.size() == repl_group_size);
   MPI_Barrier(MPI_COMM_WORLD);
 
   for (int iter = 0; iter < exponent; iter++) {
     int num_rounds = numProcesses / repl_group_size;
     for (int round = 0; round < num_rounds; round++) {
-      cerr << "Start round " << round << ". Start multiply step." << endl;
+      //cerr << "Start round " << round << ". Start multiply step." << endl;
       vector<MPI_Request> requests;
       for (PartialCSCMatrix& partial : sparseParts_A) {
         partial.MultiplyStep(myDensePart_B, myDensePart_C);
@@ -638,13 +638,13 @@ int main(int argc, char* argv[]) {
       sparseParts_A = vector<PartialCSCMatrix>();
       sparseParts_A.reserve(repl_group_size);
       for (int i = 0; i < repl_group_size; i++) {
-        cerr << "Shift initiated. Receive." << endl;
+        //cerr << "Shift initiated. Receive." << endl;
         //newPart = PartialCSCMatrix(matrixSize, numProcesses);
         sparseParts_A.emplace_back(matrixSize, numProcesses);
-        cerr << "Receive finished. Waitall." << endl;
+        //cerr << "Receive finished. Waitall." << endl;
       }
       MPI_Waitall(requests.size(), &requests[0], MPI_STATUSES_IGNORE);
-      cerr << "Round " << round << " finished. New A after shift: " << endl;
+      //cerr << "Round " << round << " finished. New A after shift: " << endl;
       //mySparsePart_A.Print();
     }
     if (iter < exponent - 1) { // not last iteration
