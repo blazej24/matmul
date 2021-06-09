@@ -380,6 +380,7 @@ public:
       cerr << endl;
       assert(cnt == 4);
       assert(V.size() == Ridx.size());
+      assert(Ridx.size() > 0);
       assert(Cptr.size() - 1 == matrixSize / numProcessors);
       //Print();
 
