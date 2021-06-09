@@ -403,13 +403,13 @@ public:
       nnz = original.totalNNZ;
       cptrSize = lenC;
       V = new double[lenRV];
-      memcpy(V, &original.V[0], lenRV);
+      memcpy(V, &original.V[0], lenRV * sizeof(double));
       //copy(original.V.begin(), original.V.begin() + lenRV, V.begin());
       Ridx = new int[lenRV];
-      memcpy(Ridx, &original.Ridx[0], lenRV);
+      memcpy(Ridx, &original.Ridx[0], lenRV * sizeof(int));
       //copy(original.Ridx.begin(), original.Ridx.begin() + lenRV, Ridx.begin());
       Cptr = new int[lenC];
-      memcpy(Cptr, &original.Cptr[0], lenC);
+      memcpy(Cptr, &original.Cptr[0], lenC * sizeof(int));
       //copy(original.Cptr.begin(), original.Cptr.begin() + lenC, Cptr.begin());
     }
 
