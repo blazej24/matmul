@@ -303,6 +303,7 @@ public:
       int offset_;
       int source = MPI_ANY_SOURCE;
       int received_parts[4];
+      MPI_Status status;
 
       for (int i = 0; i < 4; i++) {
         MPI_Probe(
@@ -325,7 +326,7 @@ public:
                   status.MPI_SOURCE, // source
                   status.MPI_TAG, // tag
                   MPI_COMM_WORLD, // communicator
-                  MPI_STATUS_IGNORE // place for status
+                  &status // place for status
           );
           received_parts[0] = 1;
         } else if (status.MPI_TAG == RIDXARR_MSG) {
@@ -338,7 +339,7 @@ public:
                   status.MPI_SOURCE, // source
                   status.MPI_TAG, // tag
                   MPI_COMM_WORLD, // communicator
-                  MPI_STATUS_IGNORE // place for status
+                  &status // place for status
           );
           received_parts[1] = 1;
         } else if (status.MPI_TAG == CPTRARR_MSG) {
@@ -351,7 +352,7 @@ public:
                   status.MPI_SOURCE, // source
                   status.MPI_TAG, // tag
                   MPI_COMM_WORLD, // communicator
-                  MPI_STATUS_IGNORE // place for status
+                  &status // place for status
           );
           received_parts[2] = 1;
         } else if (status.MPI_TAG == OFFSET_MSG) {
@@ -362,7 +363,7 @@ public:
                   status.MPI_SOURCE, // source
                   status.MPI_TAG, // tag
                   MPI_COMM_WORLD, // communicator
-                  MPI_STATUS_IGNORE // place for status
+                  &status // place for status
           );
           //cerr << "RECEIVED OFFSET: " << offset_ << endl;
           offset = offset_;
