@@ -157,7 +157,7 @@ public:
       numProcessors--;
       vector<MPI_Request> requests(4 * numProcessors, MPI_REQUEST_NULL);
 
-      for (int i = colPerProc, proc = 1; i < colsNum; i += colPerProc, proc++) {
+      for (int i = colPerProc, proc = 1, req = 0; i < colsNum; i += colPerProc, proc++) {
         int startC = i, endC = i + colPerProc;
         int startRV = Cptr[startC], endRV = Cptr[endC]-1;
         int lenC = endC - startC + 1, lenRV = endRV - startRV + 1;
@@ -169,7 +169,7 @@ public:
                 proc, // destination
                 VARR_MSG, // tag
                 MPI_COMM_WORLD, // communicator
-                &requests[proc] // place to store request handle
+                &requests[req++] // place to store request handle
         );
         MPI_Isend(
                 &Ridx[startRV], // buffer
@@ -178,7 +178,7 @@ public:
                 proc, // destination
                 RIDXARR_MSG, // tag
                 MPI_COMM_WORLD, // communicator
-                &requests[numProcessors + proc] // place to store request handle
+                &requests[req++] // place to store request handle
         );
         MPI_Isend(
                 &Cptr[startC], // buffer
@@ -187,7 +187,7 @@ public:
                 proc, // destination
                 CPTRARR_MSG, // tag
                 MPI_COMM_WORLD, // communicator
-                &requests[2 * numProcessors + proc] // place to store request handle
+                &requests[req++] // place to store request handle
         );
         //cerr << "SENDING OFFSET: " << offset << " TO PROC: " << proc << endl;
         MPI_Isend(
@@ -197,7 +197,7 @@ public:
                 proc, // destination
                 OFFSET_MSG, // tag
                 MPI_COMM_WORLD, // communicator
-                &requests[3 * numProcessors + proc] // place to store request handle
+                &requests[req++] // place to store request handle
         );
       }
 
@@ -301,14 +301,16 @@ public:
       int count;
       matrixSize = matrixSize_;
       int offset_;
+      int source = MPI_ANY_SOURCE;
 
       for (int i = 0; i < 4; i++) {
         MPI_Probe(
-                MPI_ANY_SOURCE, // source
+                source, // source
                 MPI_ANY_TAG, // tag
                 MPI_COMM_WORLD,
                 &status
         );
+        source = status.MPI_SOURCE;
         MPI_Get_count(&status, MPI_INT, &count);
         //cerr << "STATUS: COUNT: " << count << " source " << status.MPI_SOURCE << " tag " << status.MPI_TAG << endl;
 
@@ -542,23 +544,23 @@ int main(int argc, char* argv[]) {
   MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
   MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 
-  std::ofstream out("out.txt" + to_string(myRank));
-  std::streambuf *coutbuf = std::cerr.rdbuf(); //save old buf
-  std::cerr.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
+//  std::ofstream out("out.txt" + to_string(myRank));
+//  std::streambuf *coutbuf = std::cerr.rdbuf(); //save old buf
+//  std::cerr.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
 
   char *csrFilename;
   bool inner, print, use_ge;
   double ge_value;
-  int repl_group, exponent, seed;
+  int repl_group_size, exponent, seed;
   if (!parseCommandLineArgs(
-          argc, argv, &csrFilename, &inner, &print, &use_ge, &ge_value, &repl_group, &exponent, &seed)) {
+          argc, argv, &csrFilename, &inner, &print, &use_ge, &ge_value, &repl_group_size, &exponent, &seed)) {
     cerr << "Incorrect command line arguments" << endl;
     return 1;
   }
 
   cerr << "Arguments: csrFilename=" << csrFilename << " inner=" << inner << " print=" << print << " use_ge=" << use_ge;
   if (use_ge) cerr << " ge_value=" << ge_value;
-  cerr << " repl_group=" << repl_group << " exponent=" << exponent << " seed=" << seed << endl;
+  cerr << " repl_group=" << repl_group_size << " exponent=" << exponent << " seed=" << seed << endl;
 
   cerr << "numProc: " << numProcesses << " myRank: " << myRank << endl;
   int colPerProc;
@@ -596,22 +598,53 @@ int main(int argc, char* argv[]) {
   myDensePart_B.FillFromGenerator(seed, originalSize);
   MPI_Barrier(MPI_COMM_WORLD);
 
-  //cerr << "Matrices ready. A: " << endl;
-  //mySparsePart_A.Print();
+  cerr << "Matrices ready. A: " << endl;
+  mySparsePart_A.Print();
   //myDensePart_B.Print();
   //myDensePart_C.Print();
+
+  assert(numProcesses % repl_group_size == 0);
+  vector<PartialCSCMatrix> sparseParts_A;
+  sparseParts_A.push_back(mySparsePart_A);
+  int repl_groups_in_total = numProcesses / repl_group_size;
+  int myReplGroup = myRank / repl_group_size;
+  int firstMember = myReplGroup * repl_group_size;
+  cerr << "Process " << myRank << " starts replicating" << endl;
+  for (int member = firstMember; member < firstMember + repl_group_size; member++) {
+    if (myRank == member) continue;
+    cerr << "Process " << myRank << " sends to " << member << endl;
+    mySparsePart_A.SendTo(member);
+    //PartialCSCMatrix colleaguesPart = PartialCSCMatrix(matrixSize, numProcesses);
+    sparseParts_A.emplace_back(matrixSize, numProcesses);
+    //sparseParts_A.push_back(PartialCSCMatrix(matrixSize, numProcesses));
+    cerr << "Process " << myRank << " just received " << endl;
+    sparseParts_A[sparseParts_A.size() - 1].Print();
+  }
+  cerr << "Process " << myRank << " finished replicating, size=" << sparseParts_A.size() << endl;
+  assert(sparseParts_A.size() == repl_group_size);
+  MPI_Barrier(MPI_COMM_WORLD);
+
   for (int iter = 0; iter < exponent; iter++) {
-    int num_rounds = numProcesses;
+    int num_rounds = numProcesses / repl_group_size;
     for (int round = 0; round < num_rounds; round++) {
-      //cerr << "Start round " << round << ". Start multiply step." << endl;
-      mySparsePart_A.MultiplyStep(myDensePart_B, myDensePart_C);
-      //cerr << "Multiply success. Shift." << endl;
-      vector <MPI_Request> requests = mySparsePart_A.SendTo((myRank + 1) % numProcesses);
-      //cerr << "Shift initiated. Receive." << endl;
-      mySparsePart_A = PartialCSCMatrix(matrixSize, numProcesses);
-      //cerr << "Receive finished. Waitall." << endl;
+      cerr << "Start round " << round << ". Start multiply step." << endl;
+      vector<MPI_Request> requests;
+      for (PartialCSCMatrix& partial : sparseParts_A) {
+        partial.MultiplyStep(myDensePart_B, myDensePart_C);
+        vector<MPI_Request> partialRequests = partial.SendTo((myRank + repl_group_size) % numProcesses);
+        requests.reserve(requests.size() + partialRequests.size());
+        requests.insert(requests.end(), partialRequests.begin(), partialRequests.end());
+      }
+      sparseParts_A = vector<PartialCSCMatrix>();
+      sparseParts_A.reserve(repl_group_size);
+      for (int i = 0; i < repl_group_size; i++) {
+        cerr << "Shift initiated. Receive." << endl;
+        //newPart = PartialCSCMatrix(matrixSize, numProcesses);
+        sparseParts_A.emplace_back(matrixSize, numProcesses);
+        cerr << "Receive finished. Waitall." << endl;
+      }
       MPI_Waitall(requests.size(), &requests[0], MPI_STATUSES_IGNORE);
-      //cerr << "Round " << round << " finished. New A after shift: " << endl;
+      cerr << "Round " << round << " finished. New A after shift: " << endl;
       //mySparsePart_A.Print();
     }
     if (iter < exponent - 1) { // not last iteration
@@ -629,15 +662,15 @@ int main(int argc, char* argv[]) {
     reducePrintResult(myRank, ge_value, originalSize, myDensePart_C);
   }
 
-  std::cerr.rdbuf(coutbuf); //reset to standard output again
-  out.close();
-
-  /*sleep(myRank * 2);
-  cerr << "PRINTING RANK " << myRank << endl;
-  std::ifstream f("out.txt" + to_string(myRank));
-  if (f.is_open())
-    std::cerr << f.rdbuf();
-  f.close();*/
+//  std::cerr.rdbuf(coutbuf); //reset to standard output again
+//  out.close();
+//
+//  sleep(myRank);
+//  cerr << "PRINTING RANK " << myRank << endl;
+//  std::ifstream f("out.txt" + to_string(myRank));
+//  if (f.is_open())
+//    std::cerr << f.rdbuf();
+//  f.close();
 
   MPI_Finalize(); /* mark that we've finished communicating */
   return 0;
