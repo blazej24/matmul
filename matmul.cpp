@@ -510,16 +510,16 @@ void gatherPrintResults(int myRank, int numProcesses, int matrixSize, int origin
 
   if (myRank == 0) {
     cerr << "Receive whole result and print:" << endl;
-    cerr << originalSize << " " << originalSize << endl;
+    cout << originalSize << " " << originalSize << endl;
     for (int i = 0; i < originalSize; i++) {
       for (int j = 0; j < numProcesses; j++) {
         for (int k = 0; k < colPerProc; k++) {
           if (j * colPerProc + k < originalSize) {
-            cerr << fullResult[j * (matrixSize * colPerProc) + i * colPerProc + k] << " ";
+            cout << fullResult[j * (matrixSize * colPerProc) + i * colPerProc + k] << " ";
           }
         }
       }
-      cerr << endl;
+      cout << endl;
     }
     delete[] fullResult;
   }
@@ -530,7 +530,7 @@ void reducePrintResult(int myRank, double ge_value, int originalSize, PartialDen
   int fullResult = 0;
   MPI_Reduce(&myResult, &fullResult, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
   if (myRank == 0) {
-    cerr << fullResult << endl;
+    cout << fullResult << endl;
   }
 }
 
