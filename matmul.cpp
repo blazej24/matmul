@@ -104,6 +104,8 @@ private:
     friend class CSCMatrix;
 };
 
+class PartialCSCMatrix;
+
 class CSCMatrix {
 public:
     // Based on
@@ -151,9 +153,10 @@ public:
 
     vector<MPI_Request> SplitSendToProcessors(int numProcessors) {
       int colPerProc = colsNum / numProcessors; // TODO: add zeros when c % p != 0
+      numProcessors--;
       vector<MPI_Request> requests(4 * numProcessors, MPI_REQUEST_NULL);
 
-      for (int i = 0, proc = 0; i < colsNum; i += colPerProc, proc++) {
+      for (int i = colPerProc, proc = 1; i < colsNum; i += colPerProc, proc++) {
         int startC = i, endC = i + colPerProc;
         int startRV = Cptr[startC], endRV = Cptr[endC]-1;
         int lenC = endC - startC + 1, lenRV = endRV - startRV + 1;
@@ -217,6 +220,7 @@ private:
     vector<int> Cptr;
     vector<int> Ridx;
     int rowsNum, colsNum, totalNNZ, maxRowNNZ;
+    friend PartialCSCMatrix;
 };
 
 class PartialDenseMatrix {
@@ -364,6 +368,21 @@ public:
       for (int i = 0; i < Cptr.size(); i++) {
         Cptr[i] -= move_by;
       }
+    }
+
+    PartialCSCMatrix(CSCMatrix original, int numProcessors) {
+      int colPerProc = original.colsNum / numProcessors;
+      int startC = 0, endC = colPerProc;
+      int startRV = original.Cptr[startC], endRV = original.Cptr[endC]-1;
+      int lenC = endC - startC + 1, lenRV = endRV - startRV + 1;
+      offset = 0;
+      matrixSize = original.colsNum;
+      V = vector<double>(lenRV);
+      copy(original.V.begin(), original.V.begin() + lenRV, V.begin());
+      Ridx = vector<int>(lenRV);
+      copy(original.Ridx.begin(), original.Ridx.begin() + lenRV, Ridx.begin());
+      Cptr = vector<int>(lenC);
+      copy(original.Cptr.begin(), original.Cptr.begin() + lenC, Cptr.begin());
     }
 
     vector<MPI_Request> SendTo(int target) {
@@ -560,7 +579,8 @@ int main(int argc, char* argv[]) {
     MPI_Bcast(&originalSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     vector<MPI_Request> requests = csc.SplitSendToProcessors(numProcesses);
-    mySparsePart_A = PartialCSCMatrix(matrixSize, numProcesses);
+    //mySparsePart_A = PartialCSCMatrix(matrixSize, numProcesses);
+    mySparsePart_A = PartialCSCMatrix(csc, numProcesses);
     MPI_Waitall(requests.size(), &requests[0], MPI_STATUSES_IGNORE);
   } else {
     MPI_Bcast(&matrixSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
