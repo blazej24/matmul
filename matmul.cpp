@@ -10,6 +10,7 @@
 #include <cassert>
 #include <algorithm>
 #include <string>
+#include <iomanip>
 
 #include "densematgen.h"
 
