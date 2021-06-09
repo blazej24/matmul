@@ -447,7 +447,7 @@ public:
     }
 
     void MultiplyStep(PartialDenseMatrix &B, PartialDenseMatrix &result) {
-      Print();
+      cerr << "MultiplyStep: " << Cptr.size() << " " << Ridx.size() << endl;
       for (int result_column = 0; result_column < B.data[0].size(); result_column++) {
         for (int current_column = 0; current_column < Cptr.size() - 1; current_column++) {
           for (int Ridx_pos = Cptr[current_column]; Ridx_pos < Cptr[current_column + 1]; Ridx_pos++) {
