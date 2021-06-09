@@ -621,6 +621,7 @@ int main(int argc, char* argv[]) {
   cerr << "Multiply ready. C:" << endl;
   myDensePart_C.Print();
 
+  cout << fixed << setprecision(8);
   if (print) {
     gatherPrintResults(myRank, numProcesses, matrixSize, originalSize, colPerProc, myDensePart_C);
   } else if (use_ge) {

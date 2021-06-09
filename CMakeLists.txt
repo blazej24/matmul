@@ -4,10 +4,10 @@ project (MIMUW-matgen)
 SET(CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "-std=c++14  -g3 -Wall -O0")
 
-add_executable(generator
+add_executable(matrixmul
         densematgen.cpp
         densematgen.h
-        generator_main.cpp)
+        matmul.cpp)
 
 # add_executable(generator_all
 #         densematgen.cpp
