@@ -558,11 +558,11 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  cerr << "Arguments: csrFilename=" << csrFilename << " inner=" << inner << " print=" << print << " use_ge=" << use_ge;
-  if (use_ge) cerr << " ge_value=" << ge_value;
-  cerr << " repl_group=" << repl_group_size << " exponent=" << exponent << " seed=" << seed << endl;
-
-  cerr << "numProc: " << numProcesses << " myRank: " << myRank << endl;
+//  cerr << "Arguments: csrFilename=" << csrFilename << " inner=" << inner << " print=" << print << " use_ge=" << use_ge;
+//  if (use_ge) cerr << " ge_value=" << ge_value;
+//  cerr << " repl_group=" << repl_group_size << " exponent=" << exponent << " seed=" << seed << endl;
+//
+//  cerr << "numProc: " << numProcesses << " myRank: " << myRank << endl;
   int colPerProc;
   int myOffset;
 
@@ -574,7 +574,7 @@ int main(int argc, char* argv[]) {
     csr.EnsureSizeDivisibleBy(numProcesses);
     matrixSize = csr.Size();
     CSCMatrix csc(csr);
-    csc.Print();
+    //csc.Print();
 
     colPerProc = matrixSize / numProcesses;
     myOffset = colPerProc * myRank;
@@ -599,7 +599,7 @@ int main(int argc, char* argv[]) {
   MPI_Barrier(MPI_COMM_WORLD);
 
   //cerr << "Matrices ready. A: " << endl;
-  mySparsePart_A.Print();
+  //mySparsePart_A.Print();
   //myDensePart_B.Print();
   //myDensePart_C.Print();
 
