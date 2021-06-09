@@ -632,12 +632,12 @@ int main(int argc, char* argv[]) {
   std::cerr.rdbuf(coutbuf); //reset to standard output again
   out.close();
 
-  sleep(myRank * 2);
+  /*sleep(myRank * 2);
   cerr << "PRINTING RANK " << myRank << endl;
   std::ifstream f("out.txt" + to_string(myRank));
   if (f.is_open())
     std::cerr << f.rdbuf();
-  f.close();
+  f.close();*/
 
   MPI_Finalize(); /* mark that we've finished communicating */
   return 0;
