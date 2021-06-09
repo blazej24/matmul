@@ -318,9 +318,10 @@ public:
 
         if (status.MPI_TAG == VARR_MSG) {
           MPI_Get_count(&status, MPI_DOUBLE, &count);
-          V = vector<double>(count);
+          V = new double[count];
+          nnz = count;
           MPI_Recv(
-                  &V[0], // buffer
+                  V, // buffer
                   count, // count
                   MPI_DOUBLE, // datatype
                   status.MPI_SOURCE, // source
@@ -331,9 +332,9 @@ public:
           received_parts[0] = 1;
         } else if (status.MPI_TAG == RIDXARR_MSG) {
           MPI_Get_count(&status, MPI_INT, &count);
-          Ridx = vector<int>(count);
+          Ridx = new int[count];
           MPI_Recv(
-                  &Ridx[0], // buffer
+                  Ridx, // buffer
                   count, // count
                   MPI_INT, // datatype
                   status.MPI_SOURCE, // source
@@ -344,9 +345,10 @@ public:
           received_parts[1] = 1;
         } else if (status.MPI_TAG == CPTRARR_MSG) {
           MPI_Get_count(&status, MPI_INT, &count);
-          Cptr = vector<int>(count);
+          Cptr = new int[count];
+          cptrSize = count;
           MPI_Recv(
-                  &Cptr[0], // buffer
+                  Cptr, // buffer
                   count, // count
                   MPI_INT, // datatype
                   status.MPI_SOURCE, // source
@@ -380,13 +382,13 @@ public:
       }
       cerr << endl;
       assert(cnt == 4);
-      assert(V.size() == Ridx.size());
-      assert(Ridx.size() > 0);
-      assert(Cptr.size() - 1 == matrixSize / numProcessors);
+//      assert(V.size() == Ridx.size());
+//      assert(Ridx.size() > 0);
+//      assert(Cptr.size() - 1 == matrixSize / numProcessors);
       //Print();
 
       int move_by = Cptr[0];
-      for (int i = 0; i < Cptr.size(); i++) {
+      for (int i = 0; i < cptrSize; i++) {
         Cptr[i] -= move_by;
       }
     }
@@ -398,19 +400,24 @@ public:
       int lenC = endC - startC + 1, lenRV = endRV - startRV + 1;
       offset = 0;
       matrixSize = original.colsNum;
-      V = vector<double>(lenRV);
-      copy(original.V.begin(), original.V.begin() + lenRV, V.begin());
-      Ridx = vector<int>(lenRV);
-      copy(original.Ridx.begin(), original.Ridx.begin() + lenRV, Ridx.begin());
-      Cptr = vector<int>(lenC);
-      copy(original.Cptr.begin(), original.Cptr.begin() + lenC, Cptr.begin());
+      nnz = original.totalNNZ;
+      cptrSize = lenC;
+      V = new double[lenRV];
+      memcpy(V, &original.V[0], lenRV);
+      //copy(original.V.begin(), original.V.begin() + lenRV, V.begin());
+      Ridx = new int[lenRV];
+      memcpy(Ridx, &original.Ridx[0], lenRV);
+      //copy(original.Ridx.begin(), original.Ridx.begin() + lenRV, Ridx.begin());
+      Cptr = new int[lenC];
+      memcpy(Cptr, &original.Cptr[0], lenC);
+      //copy(original.Cptr.begin(), original.Cptr.begin() + lenC, Cptr.begin());
     }
 
     vector<MPI_Request> SendTo(int target) {
       vector<MPI_Request> requests(4, MPI_REQUEST_NULL);
       MPI_Isend(
-              &V[0], // buffer
-              V.size(), // count
+              V, // buffer
+              nnz, // count
               MPI_DOUBLE, // datatype
               target, // destination
               VARR_MSG, // tag
@@ -418,8 +425,8 @@ public:
               &requests[0] // place to store request handle
       );
       MPI_Isend(
-              &Ridx[0], // buffer
-              Ridx.size(), // count
+              Ridx, // buffer
+              nnz, // count
               MPI_INT, // datatype
               target, // destination
               RIDXARR_MSG, // tag
@@ -427,8 +434,8 @@ public:
               &requests[1] // place to store request handle
       );
       MPI_Isend(
-              &Cptr[0], // buffer
-              Cptr.size(), // count
+              Cptr, // buffer
+              cptrSize, // count
               MPI_INT, // datatype
               target, // destination
               CPTRARR_MSG, // tag
@@ -449,9 +456,9 @@ public:
     }
 
     void MultiplyStep(PartialDenseMatrix &B, PartialDenseMatrix &result) {
-      cerr << "MultiplyStep: " << Cptr.size() << " " << Ridx.size() << flush << endl;
+      //cerr << "MultiplyStep: " << Cptr.size() << " " << Ridx.size() << flush << endl;
       for (int result_column = 0; result_column < B.data[0].size(); result_column++) {
-        for (int current_column = 0; current_column < Cptr.size() - 1; current_column++) {
+        for (int current_column = 0; current_column < cptrSize - 1; current_column++) {
           for (int Ridx_pos = Cptr[current_column]; Ridx_pos < Cptr[current_column + 1]; Ridx_pos++) {
             int actual_row = Ridx[Ridx_pos];
             //cerr << "MultiplyStep: actual_row; current_column; Ridx_pos; current_column+offset ";
@@ -465,19 +472,19 @@ public:
     void Print() {
       cerr << "<PartialSparseCSC> msize=" << matrixSize << " offset=" << offset << endl;
       cerr << "V: ";
-      for (auto x : V) cerr << x << " ";
+      //for (auto x : V) cerr << x << " ";
       cerr << endl << "Cptr: ";
-      for (auto x : Cptr) cerr << x << " ";
+      //for (auto x : Cptr) cerr << x << " ";
       cerr << endl << "Ridx: ";
-      for (auto x : Ridx) cerr << x << " ";
+      //for (auto x : Ridx) cerr << x << " ";
       cerr << endl;
     }
 
 private:
-    vector<double> V;
-    vector<int> Cptr;
-    vector<int> Ridx;
-    int matrixSize, offset; // colsNum powininen byc tyle ile kawalek, nie cala macierz
+    double* V;
+    int* Cptr;
+    int* Ridx;
+    int matrixSize, offset, nnz, cptrSize; // colsNum powininen byc tyle ile kawalek, nie cala macierz
 };
 
 bool parseCommandLineArgs(int argc, char* argv[], char **csrFilename, bool *inner,
