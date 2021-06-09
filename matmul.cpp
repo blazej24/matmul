@@ -189,7 +189,7 @@ public:
                 MPI_COMM_WORLD, // communicator
                 &requests[2 * numProcessors + proc] // place to store request handle
         );
-        cerr << "SENDING OFFSET: " << offset << " TO PROC: " << proc << endl;
+        //cerr << "SENDING OFFSET: " << offset << " TO PROC: " << proc << endl;
         MPI_Isend(
                 &offset, // buffer
                 1, // count
@@ -310,7 +310,7 @@ public:
                 &status
         );
         MPI_Get_count(&status, MPI_INT, &count);
-        cerr << "STATUS: COUNT: " << count << " source " << status.MPI_SOURCE << " tag " << status.MPI_TAG << endl;
+        //cerr << "STATUS: COUNT: " << count << " source " << status.MPI_SOURCE << " tag " << status.MPI_TAG << endl;
 
         if (status.MPI_TAG == VARR_MSG) {
           MPI_Get_count(&status, MPI_DOUBLE, &count);
@@ -358,7 +358,7 @@ public:
                   MPI_COMM_WORLD, // communicator
                   MPI_STATUS_IGNORE // place for status
           );
-          cerr << "RECEIVED OFFSET: " << offset_ << endl;
+          //cerr << "RECEIVED OFFSET: " << offset_ << endl;
           offset = offset_;
         } else {
           assert(false);
@@ -415,7 +415,7 @@ public:
               MPI_COMM_WORLD, // communicator
               &requests[2] // place to store request handle
       );
-      cerr << "SENDING OFFSET: " << offset << " TO PROC: " << target << endl;
+      //cerr << "SENDING OFFSET: " << offset << " TO PROC: " << target << endl;
       MPI_Isend(
               &offset, // buffer
               1, // count
@@ -510,7 +510,7 @@ void gatherPrintResults(int myRank, int numProcesses, int matrixSize, int origin
   delete[] sendBuffer;
 
   if (myRank == 0) {
-    cerr << "Receive whole result and print:" << endl;
+    //cerr << "Receive whole result and print:" << endl;
     cout << originalSize << " " << originalSize << endl;
     for (int i = 0; i < originalSize; i++) {
       for (int j = 0; j < numProcesses; j++) {
@@ -590,37 +590,37 @@ int main(int argc, char* argv[]) {
     myOffset = colPerProc * myRank;
     mySparsePart_A = PartialCSCMatrix(matrixSize, numProcesses);
   }
-  cerr << "Sparse matrix ready." << endl;
+  //cerr << "Sparse matrix ready." << endl;
   PartialDenseMatrix myDensePart_B(matrixSize, colPerProc, myOffset);
   PartialDenseMatrix myDensePart_C(matrixSize, colPerProc, myOffset);
   myDensePart_B.FillFromGenerator(seed, originalSize);
   MPI_Barrier(MPI_COMM_WORLD);
 
-  cerr << "Matrices ready. A: " << endl;
-  mySparsePart_A.Print();
-  myDensePart_B.Print();
+  //cerr << "Matrices ready. A: " << endl;
+  //mySparsePart_A.Print();
+  //myDensePart_B.Print();
   //myDensePart_C.Print();
   for (int iter = 0; iter < exponent; iter++) {
     int num_rounds = numProcesses;
     for (int round = 0; round < num_rounds; round++) {
-      cerr << "Start round " << round << ". Start multiply step." << endl;
+      //cerr << "Start round " << round << ". Start multiply step." << endl;
       mySparsePart_A.MultiplyStep(myDensePart_B, myDensePart_C);
-      cerr << "Multiply success. Shift." << endl;
+      //cerr << "Multiply success. Shift." << endl;
       vector <MPI_Request> requests = mySparsePart_A.SendTo((myRank + 1) % numProcesses);
-      cerr << "Shift initiated. Receive." << endl;
+      //cerr << "Shift initiated. Receive." << endl;
       mySparsePart_A = PartialCSCMatrix(matrixSize, numProcesses);
-      cerr << "Receive finished. Waitall." << endl;
+      //cerr << "Receive finished. Waitall." << endl;
       MPI_Waitall(requests.size(), &requests[0], MPI_STATUSES_IGNORE);
-      cerr << "Round " << round << " finished. New A after shift: " << endl;
-      mySparsePart_A.Print();
+      //cerr << "Round " << round << " finished. New A after shift: " << endl;
+      //mySparsePart_A.Print();
     }
     if (iter < exponent - 1) { // not last iteration
       myDensePart_B = move(myDensePart_C);
       myDensePart_C = PartialDenseMatrix(matrixSize, colPerProc, myOffset);
     }
   }
-  cerr << "Multiply ready. C:" << endl;
-  myDensePart_C.Print();
+  //cerr << "Multiply ready. C:" << endl;
+  //myDensePart_C.Print();
 
   cout << fixed << setprecision(8);
   if (print) {
