@@ -286,11 +286,13 @@ private:
   int colsNum;
 };
 
+MPI_Status status;
+
 class PartialCSCMatrix {
 public:
     PartialCSCMatrix() {}
     PartialCSCMatrix(int matrixSize_, int numProcessors) {
-      MPI_Status status;
+
       int count;
       matrixSize = matrixSize_;
       int offset_;
